@@ -1,0 +1,116 @@
+NAME
+    CAD::Drawing::IO::Split - Fast distributed text file methods.
+
+AUTHOR
+      Eric L. Wilhelm
+      ewilhelm at sbcglobal dot net
+      http://pages.sbcglobal.net/mycroft
+
+COPYRIGHT
+    This module is copyright (C) 2003 by Eric L. Wilhelm and A. Zahner Co.
+
+LICENSE
+    This module is distributed under the same terms as Perl. See the Perl
+    source package for details.
+
+    You may use this software under one of the following licenses:
+
+      (1) GNU General Public License
+        (found at http://www.gnu.org/copyleft/gpl.html)
+      (2) Artistic License
+        (found at http://www.perl.com/pub/language/misc/Artistic.html)
+
+NO WARRANTY
+    This software is distributed with ABSOLUTELY NO WARRANTY. The author and
+    his employer will in no way be held liable for any loss or damages
+    resulting from its use.
+
+Modifications
+    The source code of this module is made freely available and
+    distributable under the GPL or Artistic License. Modifications to and
+    use of this software must adhere to one of these licenses. Changes to
+    the code should be noted as such and this notification (as well as the
+    above copyright information) must remain intact on all copies of the
+    code.
+
+    Additionally, while the author is actively developing this code,
+    notification of any intended changes or extensions would be most helpful
+    in avoiding repeated work for all parties involved. Please contact the
+    author with any such development plans.
+
+SEE ALSO
+      CAD::Drawing
+      CAD::Drawing::IO
+
+Changes
+      0.01 First Public Release
+
+Requisite Plug-in Functions
+    See CAD::Drawing::IO for a description of the plug-in architecture.
+
+  check_type
+
+    Returns true if $type is "split" or $filename is a directory (need a
+    tag?)
+
+      $fact = check_type($filename, $type);
+
+Load/Save Methods
+    Concept here is to strip data down to the absolute bare minumum in an
+    effort to find a generic and extensible incarnation of same.
+
+  save
+
+    Saves data into $toplevel_directory under a directory for each layer,
+    each type, and a file for each id.
+
+      save($drw, $toplevel_directory, \%options);
+
+    Selective saves not yet supported.
+
+    Unfortunately, the file-formats are rather primitive and the code needs
+    refactoring. These are nowhere near stable, so don't expect version
+    compatibility yet!
+
+    Needs a clear_all_like => $regex option.
+
+  load
+
+      load($drw, $toplevel_directory, \%options);
+
+    %options may include selective-load arguments
+
+Naming Functions
+  _dir_list
+
+      @list = _dir_list($dir);
+
+  _sp_filename
+
+    Creates nested directories which are required to save %obj and returns
+    the filename which should be saved into.
+
+      _sp_filename(\%obj, \%data);
+
+Inherited Methods
+  clear_dir
+
+    Removes layers (and items) from the split directory $dir.
+
+    Defaults to removing all.
+
+      $drw->clear_dir($dir, \%options);
+
+    Available options:
+      like    => qr/regex/,  # if regex matches layer name
+      not_like => qr/regex/,  # negative of above (compounded)
+
+    check_select() options:
+    %options is passed through CAD::Drawing::Defined::check_select(), so the
+    selections returned by it will be utilized here.
+
+      select_layers => \@layer_list,
+      select_types => \@types_list,
+
+    Returns the number of items removed or undef() if $dir does not exist.
+
